@@ -1,0 +1,6 @@
+{
+  "client_id": "xxxxxxx.apps.googleusercontent.com",
+  "client_secret": "xxxxxxxxxxxxxxx",
+  "refresh_token": "xxxxxxxxx",
+  "type": "authorized_user"
+}
