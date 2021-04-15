@@ -5,7 +5,7 @@ import (
 	"testing"
 
 	gax "github.com/googleapis/gax-go/v2"
-	loggermock "github.com/rockholla/go-lib/mocks/custom-mocks/logger/logger"
+	loggermock "github.com/rockholla/go-lib/mocks/custom-mocks/logger"
 	v1objects "google.golang.org/genproto/googleapis/cloud/kms/v1"
 )
 

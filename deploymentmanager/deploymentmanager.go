@@ -9,8 +9,8 @@ import (
 	"strings"
 	"time"
 
-	"github.com/rockholla/go-google-lib/google/deploymentmanager/calls"
-	"github.com/rockholla/go-google-lib/logger"
+	"github.com/rockholla/go-google-lib/deploymentmanager/calls"
+	"github.com/rockholla/go-lib/logger"
 	v2beta "google.golang.org/api/deploymentmanager/v2beta"
 	"google.golang.org/api/option"
 	yaml "gopkg.in/yaml.v2"

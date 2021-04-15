@@ -3,7 +3,7 @@ package admin
 import (
 	"testing"
 
-	loggermock "github.com/rockholla/go-lib/mocks/custom-mocks/logger/logger"
+	loggermock "github.com/rockholla/go-lib/mocks/custom-mocks/logger"
 	dirv1 "google.golang.org/api/admin/directory/v1"
 	"google.golang.org/api/googleapi"
 )

@@ -7,7 +7,7 @@ import (
 	"fmt"
 
 	v1 "cloud.google.com/go/kms/apiv1"
-	"github.com/rockholla/go-google-lib/logger"
+	"github.com/rockholla/go-lib/logger"
 	gax "github.com/googleapis/gax-go/v2"
 	"google.golang.org/api/option"
 	v1objects "google.golang.org/genproto/googleapis/cloud/kms/v1"

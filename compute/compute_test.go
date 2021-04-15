@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"testing"
 
-	loggermock "github.com/rockholla/go-lib/mocks/custom-mocks/logger/logger"
+	loggermock "github.com/rockholla/go-lib/mocks/custom-mocks/logger"
 	v1 "google.golang.org/api/compute/v1"
 	googleapi "google.golang.org/api/googleapi"
 )

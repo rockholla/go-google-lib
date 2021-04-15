@@ -5,10 +5,10 @@ import (
 	"strings"
 	"testing"
 
-	loggermock "github.com/rockholla/go-lib/mocks/custom-mocks/logger/logger"
+	loggermock "github.com/rockholla/go-lib/mocks/custom-mocks/logger"
 	v1 "google.golang.org/api/cloudresourcemanager/v1"
 	googleapi "google.golang.org/api/googleapi"
-	smv1 "google.golang.org/api/servicemanagement/v1"
+	suv1 "google.golang.org/api/serviceusage/v1"
 )
 
 const (
@@ -146,8 +146,8 @@ func (c *projectsSetIAMPolicyMock) Do(call *v1.ProjectsSetIamPolicyCall, opts ..
 }
 
 // Do is the mock for default servicesEnable
-func (c *servicesEnableMock) Do(call *smv1.ServicesEnableCall, opts ...googleapi.CallOption) (*smv1.Operation, error) {
-	return &smv1.Operation{}, nil
+func (c *servicesEnableMock) Do(call *suv1.ServicesBatchEnableCall, opts ...googleapi.CallOption) (*suv1.Operation, error) {
+	return &suv1.Operation{}, nil
 }
 
 func setProjectsCallMockDefaults(crm *CloudResourceManager) {

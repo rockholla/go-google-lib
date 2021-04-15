@@ -7,8 +7,8 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/rockholla/go-google-lib/google/admin/calls"
-	"github.com/rockholla/go-google-lib/logger"
+	"github.com/rockholla/go-google-lib/admin/calls"
+	"github.com/rockholla/go-lib/logger"
 	"golang.org/x/oauth2/google"
 	dirv1 "google.golang.org/api/admin/directory/v1"
 	"google.golang.org/api/option"

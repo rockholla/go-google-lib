@@ -7,7 +7,7 @@ import (
 	"strings"
 
 	adminv1 "cloud.google.com/go/iam/admin/apiv1"
-	"github.com/rockholla/go-google-lib/logger"
+	"github.com/rockholla/go-lib/logger"
 	gax "github.com/googleapis/gax-go/v2"
 	"google.golang.org/api/option"
 	adminpb "google.golang.org/genproto/googleapis/iam/admin/v1"

@@ -7,8 +7,8 @@ import (
 	"regexp"
 	"strings"
 
-	"github.com/rockholla/go-google-lib/google/compute/calls"
-	"github.com/rockholla/go-google-lib/logger"
+	"github.com/rockholla/go-google-lib/compute/calls"
+	"github.com/rockholla/go-lib/logger"
 	v1 "google.golang.org/api/compute/v1"
 	"google.golang.org/api/option"
 )

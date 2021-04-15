@@ -6,7 +6,7 @@ import (
 	"fmt"
 	"testing"
 
-	loggermock "github.com/rockholla/go-lib/mocks/custom-mocks/logger/logger"
+	loggermock "github.com/rockholla/go-lib/mocks/custom-mocks/logger"
 	gax "github.com/googleapis/gax-go/v2"
 	adminpb "google.golang.org/genproto/googleapis/iam/admin/v1"
 )

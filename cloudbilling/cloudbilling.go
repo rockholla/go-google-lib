@@ -6,8 +6,8 @@ import (
 	"fmt"
 	"regexp"
 
-	"github.com/rockholla/go-google-lib/google/cloudbilling/calls"
-	"github.com/rockholla/go-google-lib/logger"
+	"github.com/rockholla/go-google-lib/cloudbilling/calls"
+	"github.com/rockholla/go-lib/logger"
 	v1 "google.golang.org/api/cloudbilling/v1"
 	"google.golang.org/api/option"
 )

@@ -4,7 +4,7 @@ import (
 	"strings"
 	"testing"
 
-	loggermock "github.com/rockholla/go-lib/mocks/custom-mocks/logger/logger"
+	loggermock "github.com/rockholla/go-lib/mocks/custom-mocks/logger"
 	v2beta1 "google.golang.org/api/cloudresourcemanager/v2beta1"
 	googleapi "google.golang.org/api/googleapi"
 )

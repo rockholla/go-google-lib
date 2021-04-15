@@ -6,7 +6,7 @@ import (
 	"strings"
 	"testing"
 
-	loggermock "github.com/rockholla/go-lib/mocks/custom-mocks/logger/logger"
+	loggermock "github.com/rockholla/go-lib/mocks/custom-mocks/logger"
 	v2beta "google.golang.org/api/deploymentmanager/v2beta"
 	googleapi "google.golang.org/api/googleapi"
 )

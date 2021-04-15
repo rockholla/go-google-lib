@@ -2,14 +2,14 @@
 package google
 
 import (
-	"github.com/rockholla/go-google-lib/google/admin"
-	"github.com/rockholla/go-google-lib/google/cloudbilling"
-	"github.com/rockholla/go-google-lib/google/cloudresourcemanager"
-	"github.com/rockholla/go-google-lib/google/compute"
-	"github.com/rockholla/go-google-lib/google/deploymentmanager"
-	"github.com/rockholla/go-google-lib/google/dns"
-	"github.com/rockholla/go-google-lib/google/iam"
-	"github.com/rockholla/go-google-lib/google/storage"
+	"github.com/rockholla/go-google-lib/admin"
+	"github.com/rockholla/go-google-lib/cloudbilling"
+	"github.com/rockholla/go-google-lib/cloudresourcemanager"
+	"github.com/rockholla/go-google-lib/compute"
+	"github.com/rockholla/go-google-lib/deploymentmanager"
+	"github.com/rockholla/go-google-lib/dns"
+	"github.com/rockholla/go-google-lib/iam"
+	"github.com/rockholla/go-google-lib/storage"
 	"github.com/rockholla/go-lib/logger"
 )
 

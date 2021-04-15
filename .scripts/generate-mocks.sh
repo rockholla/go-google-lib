@@ -6,5 +6,5 @@ cd $this_dir/../
 if ! command -v mockery &> /dev/null; then
   go get github.com/vektra/mockery/v2/.../
 fi
-find ./mocks -mindepth 1 -maxdepth 1 -not -name _manual -exec rm -rf '{}' \;
+find ./mocks -mindepth 1 -maxdepth 1 -not -name custom-mocks -exec rm -rf '{}' \;
 mockery --all --keeptree

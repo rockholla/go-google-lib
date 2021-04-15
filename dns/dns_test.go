@@ -3,7 +3,7 @@ package dns
 import (
 	"testing"
 
-	loggermock "github.com/rockholla/go-lib/mocks/custom-mocks/logger/logger"
+	loggermock "github.com/rockholla/go-lib/mocks/custom-mocks/logger"
 	v1 "google.golang.org/api/dns/v1"
 	googleapi "google.golang.org/api/googleapi"
 )

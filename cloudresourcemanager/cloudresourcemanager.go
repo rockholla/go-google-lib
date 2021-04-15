@@ -4,12 +4,12 @@ package cloudresourcemanager
 import (
 	"context"
 
-	"github.com/rockholla/go-google-lib/google/cloudresourcemanager/calls"
-	"github.com/rockholla/go-google-lib/logger"
+	"github.com/rockholla/go-google-lib/cloudresourcemanager/calls"
+	"github.com/rockholla/go-lib/logger"
 	v1 "google.golang.org/api/cloudresourcemanager/v1"
 	v2beta1 "google.golang.org/api/cloudresourcemanager/v2beta1"
 	"google.golang.org/api/option"
-	smv1 "google.golang.org/api/servicemanagement/v1"
+	suv1 "google.golang.org/api/serviceusage/v1"
 )
 
 // Interface represents functionality for CloudResourceManager
@@ -32,7 +32,7 @@ type CloudResourceManager struct {
 	log     logger.Interface
 	V1      *v1.Service
 	V2Beta1 *v2beta1.Service
-	SMV1    *smv1.APIService
+	SUV1    *suv1.Service
 	Calls   *Calls
 }
 
@@ -80,7 +80,7 @@ func (crm *CloudResourceManager) Initialize(credentials string, log logger.Inter
 		if crm.V2Beta1, err = v2beta1.NewService(ctx, option.WithCredentialsJSON([]byte(credentials))); err != nil {
 			return err
 		}
-		if crm.SMV1, err = smv1.NewService(ctx, option.WithCredentialsJSON([]byte(credentials))); err != nil {
+		if crm.SUV1, err = suv1.NewService(ctx, option.WithCredentialsJSON([]byte(credentials))); err != nil {
 			return err
 		}
 	} else {
@@ -90,7 +90,7 @@ func (crm *CloudResourceManager) Initialize(credentials string, log logger.Inter
 		if crm.V2Beta1, err = v2beta1.NewService(ctx); err != nil {
 			return err
 		}
-		if crm.SMV1, err = smv1.NewService(ctx); err != nil {
+		if crm.SUV1, err = suv1.NewService(ctx); err != nil {
 			return err
 		}
 	}

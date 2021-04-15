@@ -3,7 +3,7 @@ package cloudresourcemanager
 import (
 	"testing"
 
-	loggermock "github.com/rockholla/go-lib/mocks/custom-mocks/logger/logger"
+	loggermock "github.com/rockholla/go-lib/mocks/custom-mocks/logger"
 )
 
 const (

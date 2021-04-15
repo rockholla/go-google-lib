@@ -9,7 +9,7 @@ import (
 	"time"
 
 	v1 "google.golang.org/api/cloudresourcemanager/v1"
-	smv1 "google.golang.org/api/servicemanagement/v1"
+	suv1 "google.golang.org/api/serviceusage/v1"
 )
 
 // MakeProjectID will construct a custom project ID based on the name of the project and it's parent
@@ -116,21 +116,21 @@ func (crm *CloudResourceManager) EnsureProject(name string, parent string) (stri
 // EnableProjectServices will enable 1 or many services in a project
 func (crm *CloudResourceManager) EnableProjectServices(projectID string, services []string) error {
 	ctx := context.Background()
-	servicesService := smv1.NewServicesService(crm.SMV1)
+	servicesService := suv1.NewServicesService(crm.SUV1)
 	crm.log.Info("Ensuring service APIs are enabled in project %s:", projectID)
 	for _, service := range services {
 		crm.log.ListItem(service)
-		enableServiceRequest := &smv1.EnableServiceRequest{
-			ConsumerId: fmt.Sprintf("project:%s", projectID),
-		}
-		serviceEnableCall := servicesService.Enable(service, enableServiceRequest).Context(ctx)
-		serviceEnableOperation, err := crm.Calls.ServicesEnable.Do(serviceEnableCall)
-		if err != nil {
-			return err
-		}
-		if serviceEnableOperation.Error != nil {
-			return errors.New(serviceEnableOperation.Error.Message)
-		}
+	}
+	enableServiceRequest := &suv1.BatchEnableServicesRequest{
+		ServiceIds: services,
+	}
+	servicesEnableCall := servicesService.BatchEnable(projectID, enableServiceRequest).Context(ctx)
+	servicesEnableOperation, err := crm.Calls.ServicesEnable.Do(servicesEnableCall)
+	if err != nil {
+		return err
+	}
+	if servicesEnableOperation.Error != nil {
+		return errors.New(servicesEnableOperation.Error.Message)
 	}
 	// TODO: wait for services to actually be enabled, proven difficult in current state of affairs
 	// with Google SDK/API here

@@ -9,7 +9,7 @@ import (
 
 	"cloud.google.com/go/iam"
 	api "cloud.google.com/go/storage"
-	"github.com/rockholla/go-google-lib/logger"
+	"github.com/rockholla/go-lib/logger"
 	"google.golang.org/api/option"
 )
 

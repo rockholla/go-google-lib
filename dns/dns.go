@@ -7,8 +7,8 @@ import (
 	"strings"
 	"time"
 
-	"github.com/rockholla/go-google-lib/google/dns/calls"
-	"github.com/rockholla/go-google-lib/logger"
+	"github.com/rockholla/go-google-lib/dns/calls"
+	"github.com/rockholla/go-lib/logger"
 	v1 "google.golang.org/api/dns/v1"
 	"google.golang.org/api/option"
 )

@@ -11,7 +11,7 @@ import (
 	"testing"
 
 	api "cloud.google.com/go/storage"
-	loggermock "github.com/rockholla/go-lib/mocks/custom-mocks/logger/logger"
+	loggermock "github.com/rockholla/go-lib/mocks/custom-mocks/logger"
 	"google.golang.org/api/option"
 )
 

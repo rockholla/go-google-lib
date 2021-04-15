@@ -3,7 +3,7 @@ package calls
 import (
 	v1 "google.golang.org/api/cloudresourcemanager/v1"
 	googleapi "google.golang.org/api/googleapi"
-	smv1 "google.golang.org/api/servicemanagement/v1"
+	suv1 "google.golang.org/api/serviceusage/v1"
 )
 
 // ProjectsListCallInterface is an interface to a call to list projects
@@ -38,7 +38,7 @@ type ProjectsSetIAMPolicyCallInterface interface {
 
 // ServicesEnableCallInterface is an interface to call to enable services/apis on a project
 type ServicesEnableCallInterface interface {
-	Do(call *smv1.ServicesEnableCall, opts ...googleapi.CallOption) (*smv1.Operation, error)
+	Do(call *suv1.ServicesBatchEnableCall, opts ...googleapi.CallOption) (*suv1.Operation, error)
 }
 
 // ProjectsListCall is the default implementation for ProjectsListCallInterface
@@ -93,6 +93,6 @@ func (c *ProjectsSetIAMPolicyCall) Do(call *v1.ProjectsSetIamPolicyCall, opts ..
 }
 
 // Do performs the call, the default implementation of the interface
-func (c *ServicesEnableCall) Do(call *smv1.ServicesEnableCall, opts ...googleapi.CallOption) (*smv1.Operation, error) {
+func (c *ServicesEnableCall) Do(call *suv1.ServicesBatchEnableCall, opts ...googleapi.CallOption) (*suv1.Operation, error) {
 	return call.Do(opts...)
 }
