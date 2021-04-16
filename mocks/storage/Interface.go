@@ -14,6 +14,20 @@ type Interface struct {
 	mock.Mock
 }
 
+// EnsureBucket provides a mock function with given fields: name, projectID
+func (_m *Interface) EnsureBucket(name string, projectID string) error {
+	ret := _m.Called(name, projectID)
+
+	var r0 error
+	if rf, ok := ret.Get(0).(func(string, string) error); ok {
+		r0 = rf(name, projectID)
+	} else {
+		r0 = ret.Error(0)
+	}
+
+	return r0
+}
+
 // EnsureBucketRoles provides a mock function with given fields: bucket, member, roles
 func (_m *Interface) EnsureBucketRoles(bucket string, member string, roles []string) error {
 	ret := _m.Called(bucket, member, roles)

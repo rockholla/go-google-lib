@@ -16,6 +16,7 @@ import (
 // Interface represents functionality for storage
 type Interface interface {
 	Initialize(credentials string, log logger.Interface) error
+	EnsureBucket(name string, projectID string) error
 	EnsureObject(bucket string, path string, object *Object) error
 	GetObject(bucket string, path string) ([]byte, error)
 	GetServiceAccount(projectID string) (string, error)
@@ -47,6 +48,16 @@ func (storage *Storage) Initialize(credentials string, log logger.Interface) err
 		if storage.Client, err = api.NewClient(ctx); err != nil {
 			return err
 		}
+	}
+	return nil
+}
+
+// EnsureBucket will make sure that a bucket with a name exists in a project
+func (storage *Storage) EnsureBucket(name string, projectID string) error {
+	ctx := context.Background()
+	bucketCreator := storage.Client.Bucket(name)
+	if err := bucketCreator.Create(ctx, projectID, nil); err != nil {
+		return fmt.Errorf("Error creating bucket: %s", err)
 	}
 	return nil
 }

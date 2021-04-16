@@ -89,6 +89,21 @@ func TestInitialize(t *testing.T) {
 	}
 }
 
+func TestEnsureBucket(t *testing.T) {
+	s := &Storage{}
+	err := s.Initialize("", loggermock.GetLogMock())
+	if err != nil {
+		t.Errorf("Got unexpected error during storage.Initialize() with blank credentials: %s", err)
+	}
+	mt := &mockTransport{}
+	mt.addResult(&http.Response{StatusCode: 200, Body: bodyReader("{}")}, nil)
+	s.Client = mockClient(t, mt)
+	err = s.EnsureBucket("bucket", "project-id")
+	if err != nil {
+		t.Errorf("Got unexpected error for storage.EnsureBucket(): %s", err)
+	}
+}
+
 func TestEnsureObject(t *testing.T) {
 	s := &Storage{}
 	err := s.Initialize("", loggermock.GetLogMock())
