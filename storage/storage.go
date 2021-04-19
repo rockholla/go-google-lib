@@ -55,11 +55,15 @@ func (storage *Storage) Initialize(credentials string, log logger.Interface) err
 // EnsureBucket will make sure that a bucket with a name exists in a project
 func (storage *Storage) EnsureBucket(name string, projectID string) error {
 	ctx := context.Background()
-	bucketCreator := storage.Client.Bucket(name)
-	if err := bucketCreator.Create(ctx, projectID, nil); err != nil {
-		return fmt.Errorf("Error creating bucket: %s", err)
+	storage.log.Info("Ensuring bucket gs://%s exists in project %s:", name, projectID)
+	bucketHandle := storage.Client.Bucket(name)
+	_, err := bucketHandle.Attrs(ctx)
+	if err == api.ErrBucketNotExist {
+		if err := bucketHandle.Create(ctx, projectID, nil); err != nil {
+			return fmt.Errorf("Error creating bucket: %s", err)
+		}
 	}
-	return nil
+	return err
 }
 
 // EnsureObject will make sure that an object exists and is updated with provided data in a bucket
