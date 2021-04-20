@@ -21,47 +21,65 @@ import (
 )
 
 // GoogleMock is a mock of our root level access to different APIs
-type GoogleMock struct{}
+// A user of this mock is meant to set each of the needed underlying APIs
+// and what each mocks on this object, e.g.
+//
+// crmMock := &crmmocks.Interface{}
+// crmMock.On("EnsureFolder", rootFolderDisplayName, fmt.Sprintf("organizations/%s", testOrganizationID)).Return(testRootFolderName, nil)
+//
+// mock := &googlelibmocks.GoogleMock{
+// 	CloudResourceManager: crmMock,
+// }
+type GoogleMock struct {
+	CloudResourceManager *cloudresourcemanagermock.Interface
+	CloudBilling         *cloudbillingmock.Interface
+	Admin                *adminmock.Interface
+	Compute              *computemock.Interface
+	DeploymentManager    *deploymentmanagermock.Interface
+	DNS                  *dnsmock.Interface
+	IAM                  *iammock.Interface
+	Storage              *storagemock.Interface
+}
 
 // Initialize is a no-op in the mock
-func (google *GoogleMock) Initialize(credentials string, log logger.Interface) {}
+func (m *GoogleMock) Initialize(credentials string, log logger.Interface) {}
 
 // GetCloudResourceManager mock
-func (google *GoogleMock) GetCloudResourceManager() (cloudresourcemanager.Interface, error) {
-	return &cloudresourcemanagermock.Interface{}, nil
+func (m *GoogleMock) GetCloudResourceManager() (cloudresourcemanager.Interface, error) {
+	return m.CloudResourceManager, nil
 }
 
 // GetCloudBilling mock
-func (google *GoogleMock) GetCloudBilling() (cloudbilling.Interface, error) {
-	return &cloudbillingmock.Interface{}, nil
+func (m *GoogleMock) GetCloudBilling() (cloudbilling.Interface, error) {
+	return m.CloudBilling, nil
 }
 
 // GetIAM mock
-func (google *GoogleMock) GetIAM() (iam.Interface, error) {
-	return &iammock.Interface{}, nil
+func (m *GoogleMock) GetIAM() (iam.Interface, error) {
+	return m.IAM, nil
 }
 
 // GetDeploymentManager mock
-func (google *GoogleMock) GetDeploymentManager() (deploymentmanager.Interface, error) {
-	return &deploymentmanagermock.Interface{}, nil
+func (m *GoogleMock) GetDeploymentManager() (deploymentmanager.Interface, error) {
+	return m.DeploymentManager, nil
 }
 
 // GetStorage mock
-func (google *GoogleMock) GetStorage() (storage.Interface, error) {
-	return &storagemock.Interface{}, nil
+func (m *GoogleMock) GetStorage() (storage.Interface, error) {
+	return m.Storage, nil
 }
 
 // GetCompute mock
-func (google *GoogleMock) GetCompute() (compute.Interface, error) {
-	return &computemock.Interface{}, nil
+func (m *GoogleMock) GetCompute() (compute.Interface, error) {
+	return m.Compute, nil
 }
 
 // GetDNS mock
-func (google *GoogleMock) GetDNS() (dns.Interface, error) {
-	return &dnsmock.Interface{}, nil
+func (m *GoogleMock) GetDNS() (dns.Interface, error) {
+	return m.DNS, nil
 }
 
 // GetAdmin mock
-func (google *GoogleMock) GetAdmin(credentialsJSON string, domain string, adminUsername string) (admin.Interface, error) {
-	return &adminmock.Interface{}, nil
+func (m *GoogleMock) GetAdmin(credentialsJSON string, domain string, adminUsername string) (admin.Interface, error) {
+	return m.Admin, nil
 }
