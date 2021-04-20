@@ -21,16 +21,7 @@ import (
 )
 
 // GoogleMock is a mock of our root level access to different APIs
-type GoogleMock struct {
-	cloudResourceManager cloudresourcemanager.Interface
-	cloudBilling         cloudbilling.Interface
-	iam                  iam.Interface
-	deploymentManager    deploymentmanager.Interface
-	storage              storage.Interface
-	compute              compute.Interface
-	dns                  dns.Interface
-	admin                admin.Interface
-}
+type GoogleMock struct{}
 
 // Initialize is a no-op in the mock
 func (google *GoogleMock) Initialize(credentials string, log logger.Interface) {}
