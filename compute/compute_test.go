@@ -46,6 +46,8 @@ type firewallsListMock struct{}
 type firewallDeleteMock struct{}
 type instanceGroupsListMock struct{}
 type instanceGroupDeleteMock struct{}
+type networkGetMock struct{}
+type networkDeleteMock struct{}
 
 // Do is the mock for default regionsGetMock
 func (c *regionsGetMock) Do(call *v1.RegionsGetCall, opts ...googleapi.CallOption) (*v1.Region, error) {
@@ -319,6 +321,14 @@ func (c *instanceGroupDeleteMock) Do(call *v1.InstanceGroupsDeleteCall, opts ...
 	return &v1.Operation{}, nil
 }
 
+func (c *networkGetMock) Do(call *v1.NetworksGetCall, opts ...googleapi.CallOption) (*v1.Network, error) {
+	return &v1.Network{}, nil
+}
+
+func (c *networkDeleteMock) Do(call *v1.NetworksDeleteCall, opts ...googleapi.CallOption) (*v1.Operation, error) {
+	return &v1.Operation{}, nil
+}
+
 func setCallMockDefaults(c *Compute) {
 	c.Calls = &Calls{
 		RegionsGet:                        &regionsGetMock{},
@@ -346,6 +356,8 @@ func setCallMockDefaults(c *Compute) {
 		FirewallDelete:                    &firewallDeleteMock{},
 		InstanceGroupsList:                &instanceGroupsListMock{},
 		InstanceGroupDelete:               &instanceGroupDeleteMock{},
+		NetworkGet:                        &networkGetMock{},
+		NetworkDelete:                     &networkDeleteMock{},
 	}
 }
 
@@ -683,5 +695,31 @@ func TestDeleteInstanceGroup(t *testing.T) {
 	err = c.DeleteInstanceGroup("project", "zone", "instance-group")
 	if err != nil {
 		t.Errorf("Got unexpected error during compute.DeleteInstanceGroup(): %s", err)
+	}
+}
+
+func TestGetNetwork(t *testing.T) {
+	c := &Compute{}
+	err := c.Initialize("", loggermock.GetLogMock())
+	if err != nil {
+		t.Errorf("Got unexpected error during compute.Initialize() with blank credentials: %s", err)
+	}
+	setCallMockDefaults(c)
+	_, err = c.GetNetwork("project", "network")
+	if err != nil {
+		t.Errorf("Got unexpected error during compute.TestGetNetwork(): %s", err)
+	}
+}
+
+func TestDeleteNetwork(t *testing.T) {
+	c := &Compute{}
+	err := c.Initialize("", loggermock.GetLogMock())
+	if err != nil {
+		t.Errorf("Got unexpected error during compute.Initialize() with blank credentials: %s", err)
+	}
+	setCallMockDefaults(c)
+	err = c.DeleteNetwork("project", "network")
+	if err != nil {
+		t.Errorf("Got unexpected error during compute.TestDeleteNetwork(): %s", err)
 	}
 }

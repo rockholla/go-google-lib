@@ -46,6 +46,8 @@ type Interface interface {
 	DeleteFirewall(projectID string, name string) error
 	GetInstanceGroups(projectID string) ([]*v1.InstanceGroup, error)
 	DeleteInstanceGroup(projectID string, zone string, name string) error
+	GetNetwork(projectID string, name string) (*v1.Network, error)
+	DeleteNetwork(projectID string, name string) error
 }
 
 // InstanceIP is an IP for a VM instance
@@ -93,6 +95,8 @@ type Calls struct {
 	FirewallDelete                    calls.FirewallDeleteCallInterface
 	InstanceGroupsList                calls.InstanceGroupsListCallInterface
 	InstanceGroupDelete               calls.InstanceGroupDeleteCallInterface
+	NetworkGet                        calls.NetworkGetCallInterface
+	NetworkDelete                     calls.NetworkDeleteCallInterface
 }
 
 // Initialize sets up necessary google-provided sdks and other local data
@@ -126,6 +130,8 @@ func (c *Compute) Initialize(credentials string, log logger.Interface) error {
 		FirewallDelete:                    &calls.FirewallDeleteCall{},
 		InstanceGroupsList:                &calls.InstanceGroupsListCall{},
 		InstanceGroupDelete:               &calls.InstanceGroupDeleteCall{},
+		NetworkGet:                        &calls.NetworkGetCall{},
+		NetworkDelete:                     &calls.NetworkDeleteCall{},
 	}
 	if credentials != "" {
 		if c.V1, err = v1.NewService(ctx, option.WithCredentialsJSON([]byte(credentials))); err != nil {
@@ -502,6 +508,23 @@ func (c *Compute) DeleteInstanceGroup(projectID string, zone string, name string
 	instanceGroupsService := v1.NewInstanceGroupsService(c.V1)
 	instanceGroupsDeleteCall := instanceGroupsService.Delete(projectID, zone, name).Context(ctx)
 	_, err := c.Calls.InstanceGroupDelete.Do(instanceGroupsDeleteCall)
+	return err
+}
+
+// GetNetwork will retrieve an existing network in a project
+func (c *Compute) GetNetwork(projectID string, name string) (*v1.Network, error) {
+	ctx := context.Background()
+	networksService := v1.NewNetworksService(c.V1)
+	networkGetCall := networksService.Get(projectID, name).Context(ctx)
+	return c.Calls.NetworkGet.Do(networkGetCall)
+}
+
+// DeleteNetwork will delete a network in a project
+func (c *Compute) DeleteNetwork(projectID string, name string) error {
+	ctx := context.Background()
+	networksService := v1.NewNetworksService(c.V1)
+	networkDeleteCall := networksService.Delete(projectID, name).Context(ctx)
+	_, err := c.Calls.NetworkDelete.Do(networkDeleteCall)
 	return err
 }
 

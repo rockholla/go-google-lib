@@ -128,6 +128,20 @@ func (_m *Interface) DeleteInstanceGroup(projectID string, zone string, name str
 	return r0
 }
 
+// DeleteNetwork provides a mock function with given fields: projectID, name
+func (_m *Interface) DeleteNetwork(projectID string, name string) error {
+	ret := _m.Called(projectID, name)
+
+	var r0 error
+	if rf, ok := ret.Get(0).(func(string, string) error); ok {
+		r0 = rf(projectID, name)
+	} else {
+		r0 = ret.Error(0)
+	}
+
+	return r0
+}
+
 // DeleteRegionBackendService provides a mock function with given fields: projectID, region, name
 func (_m *Interface) DeleteRegionBackendService(projectID string, region string, name string) error {
 	ret := _m.Called(projectID, region, name)
@@ -356,6 +370,29 @@ func (_m *Interface) GetInternalIPs(projectID string, network string) ([]*comput
 	var r1 error
 	if rf, ok := ret.Get(1).(func(string, string) error); ok {
 		r1 = rf(projectID, network)
+	} else {
+		r1 = ret.Error(1)
+	}
+
+	return r0, r1
+}
+
+// GetNetwork provides a mock function with given fields: projectID, name
+func (_m *Interface) GetNetwork(projectID string, name string) (*v1.Network, error) {
+	ret := _m.Called(projectID, name)
+
+	var r0 *v1.Network
+	if rf, ok := ret.Get(0).(func(string, string) *v1.Network); ok {
+		r0 = rf(projectID, name)
+	} else {
+		if ret.Get(0) != nil {
+			r0 = ret.Get(0).(*v1.Network)
+		}
+	}
+
+	var r1 error
+	if rf, ok := ret.Get(1).(func(string, string) error); ok {
+		r1 = rf(projectID, name)
 	} else {
 		r1 = ret.Error(1)
 	}
