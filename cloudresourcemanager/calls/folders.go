@@ -2,6 +2,7 @@
 package calls
 
 import (
+	v1 "google.golang.org/api/cloudresourcemanager/v1"
 	v2beta1 "google.golang.org/api/cloudresourcemanager/v2beta1"
 	googleapi "google.golang.org/api/googleapi"
 )
@@ -26,6 +27,11 @@ type FoldersSetIAMPolicyCallInterface interface {
 	Do(call *v2beta1.FoldersSetIamPolicyCall, opts ...googleapi.CallOption) (*v2beta1.Policy, error)
 }
 
+// FoldersSetOrgPolicyCallInterface is an interface to a call to set an org policy constraint on a folder
+type FoldersSetOrgPolicyCallInterface interface {
+	Do(call *v1.FoldersSetOrgPolicyCall, opts ...googleapi.CallOption) (*v1.OrgPolicy, error)
+}
+
 // FoldersSearchCall is the default implementation for FoldersSearchCallInterface
 type FoldersSearchCall struct{}
 
@@ -37,6 +43,9 @@ type FoldersGetIAMPolicyCall struct{}
 
 // FoldersSetIAMPolicyCall is the default implementation for FoldersSetIAMPolicyCallInterface
 type FoldersSetIAMPolicyCall struct{}
+
+// FoldersSetOrgPolicyCall is the default implementation for FoldersSetOrgPolicyCallInterface
+type FoldersSetOrgPolicyCall struct{}
 
 // Do performs the call, the default implementation of the interface
 func (c *FoldersSearchCall) Do(call *v2beta1.FoldersSearchCall, opts ...googleapi.CallOption) (*v2beta1.SearchFoldersResponse, error) {
@@ -55,5 +64,10 @@ func (c *FoldersGetIAMPolicyCall) Do(call *v2beta1.FoldersGetIamPolicyCall, opts
 
 // Do performs the call, the default implementation of the interface
 func (c *FoldersSetIAMPolicyCall) Do(call *v2beta1.FoldersSetIamPolicyCall, opts ...googleapi.CallOption) (*v2beta1.Policy, error) {
+	return call.Do(opts...)
+}
+
+// Do performs the call, the default implementation of the interface
+func (c *FoldersSetOrgPolicyCall) Do(call *v1.FoldersSetOrgPolicyCall, opts ...googleapi.CallOption) (*v1.OrgPolicy, error) {
 	return call.Do(opts...)
 }

@@ -2,11 +2,13 @@ package cloudresourcemanager
 
 import (
 	"context"
+	"encoding/json"
 	"errors"
 	"fmt"
 	"regexp"
 	"time"
 
+	v1 "google.golang.org/api/cloudresourcemanager/v1"
 	v2beta1 "google.golang.org/api/cloudresourcemanager/v2beta1"
 )
 
@@ -105,6 +107,26 @@ func (crm *CloudResourceManager) EnsureFolderRoles(folder string, member string,
 	}
 	folderSetPolicyCall := foldersService.SetIamPolicy(folder, setIAMPolicyRequest).Context(ctx)
 	_, err = crm.Calls.FoldersSetIAMPolicy.Do(folderSetPolicyCall)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+// SetFolderOrgPolicy will set a particular org policy on a folder
+func (crm *CloudResourceManager) SetFolderOrgPolicy(folder string, policy *v1.OrgPolicy) error {
+	ctx := context.Background()
+	if matched, _ := regexp.Match("^folders\\/", []byte(folder)); !matched {
+		folder = fmt.Sprintf("folders/%s", folder)
+	}
+	policyBytes, _ := json.Marshal(policy)
+	crm.log.Info("Ensuring org policy is set on folder %s: %s", folder, string(policyBytes))
+	foldersService := v1.NewFoldersService(crm.V1)
+	setOrgPolicyRequest := &v1.SetOrgPolicyRequest{
+		Policy: policy,
+	}
+	folderSetPolicyCall := foldersService.SetOrgPolicy(folder, setOrgPolicyRequest).Context(ctx)
+	_, err := crm.Calls.FoldersSetOrgPolicy.Do(folderSetPolicyCall)
 	if err != nil {
 		return err
 	}

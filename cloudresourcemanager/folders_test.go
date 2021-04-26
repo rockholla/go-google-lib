@@ -5,6 +5,7 @@ import (
 	"testing"
 
 	loggermock "github.com/rockholla/go-lib/mocks/custom-mocks/logger"
+	v1 "google.golang.org/api/cloudresourcemanager/v1"
 	v2beta1 "google.golang.org/api/cloudresourcemanager/v2beta1"
 	googleapi "google.golang.org/api/googleapi"
 )
@@ -26,6 +27,7 @@ type foldersGetIAMPolicyMock struct{}
 type foldersGetIAMPolicyExistingMemberMock struct{}
 type foldersGetIAMPolicyExistingRoleMock struct{}
 type foldersSetIAMPolicyMock struct{}
+type foldersSetOrgPolicyMock struct{}
 
 // Do is the mock for default foldersSearchMock
 func (c *foldersSearchMock) Do(call *v2beta1.FoldersSearchCall, opts ...googleapi.CallOption) (*v2beta1.SearchFoldersResponse, error) {
@@ -105,12 +107,17 @@ func (c *foldersSetIAMPolicyMock) Do(call *v2beta1.FoldersSetIamPolicyCall, opts
 	return &v2beta1.Policy{}, nil
 }
 
+func (c *foldersSetOrgPolicyMock) Do(call *v1.FoldersSetOrgPolicyCall, opts ...googleapi.CallOption) (*v1.OrgPolicy, error) {
+	return &v1.OrgPolicy{}, nil
+}
+
 func setFoldersCallMockDefaults(crm *CloudResourceManager) {
 	crm.Calls = &Calls{
 		FoldersSearch:       &foldersSearchMock{},
 		FoldersCreate:       &foldersCreateMock{},
 		FoldersGetIAMPolicy: &foldersGetIAMPolicyMock{},
 		FoldersSetIAMPolicy: &foldersSetIAMPolicyMock{},
+		FoldersSetOrgPolicy: &foldersSetOrgPolicyMock{},
 	}
 }
 
@@ -228,5 +235,18 @@ func TestEnsureFolderRolesExistingRoleWithoutMember(t *testing.T) {
 	err = crm.EnsureFolderRoles(testFolderName, testMember, []string{testRole, "role2"})
 	if err != nil {
 		t.Errorf("Got unexpected error for cloudresourcemanager.EnsureFolderRoles() with existing role, but member not within: %s", err)
+	}
+}
+
+func TestSetFolderOrgPolicy(t *testing.T) {
+	crm := &CloudResourceManager{}
+	err := crm.Initialize("", loggermock.GetLogMock())
+	if err != nil {
+		t.Errorf("Got unexpected error for cloudresourcemanager.Initialize() with blank credentials: %s", err)
+	}
+	setFoldersCallMockDefaults(crm)
+	err = crm.SetFolderOrgPolicy(testFolderName, &v1.OrgPolicy{})
+	if err != nil {
+		t.Errorf("Got unexpected error for cloudresourcemanager.TestSetFolderOrgPolicy(): %s", err)
 	}
 }

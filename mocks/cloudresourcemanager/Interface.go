@@ -213,3 +213,17 @@ func (_m *Interface) Initialize(credentials string, log logger.Interface) error 
 
 	return r0
 }
+
+// SetFolderOrgPolicy provides a mock function with given fields: folder, policy
+func (_m *Interface) SetFolderOrgPolicy(folder string, policy *v1.OrgPolicy) error {
+	ret := _m.Called(folder, policy)
+
+	var r0 error
+	if rf, ok := ret.Get(0).(func(string, *v1.OrgPolicy) error); ok {
+		r0 = rf(folder, policy)
+	} else {
+		r0 = ret.Error(0)
+	}
+
+	return r0
+}

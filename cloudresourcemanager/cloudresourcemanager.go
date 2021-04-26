@@ -18,6 +18,7 @@ type Interface interface {
 	GetFolder(displayName string, parent string) (string, error)
 	EnsureFolder(displayName string, parent string) (string, error)
 	EnsureFolderRoles(folder string, member string, roles []string) error
+	SetFolderOrgPolicy(folder string, policy *v1.OrgPolicy) error
 	GetProject(name string, parent string) (*v1.Project, error)
 	DeleteProject(id string) error
 	GetProjectByID(id string) (*v1.Project, error)
@@ -42,6 +43,7 @@ type Calls struct {
 	FoldersCreate             calls.FoldersCreateCallInterface
 	FoldersGetIAMPolicy       calls.FoldersGetIAMPolicyCallInterface
 	FoldersSetIAMPolicy       calls.FoldersSetIAMPolicyCallInterface
+	FoldersSetOrgPolicy       calls.FoldersSetOrgPolicyCallInterface
 	ProjectsList              calls.ProjectsListCallInterface
 	ProjectsGet               calls.ProjectsGetCallInterface
 	ProjectsCreate            calls.ProjectsCreateCallInterface
@@ -63,6 +65,7 @@ func (crm *CloudResourceManager) Initialize(credentials string, log logger.Inter
 		FoldersCreate:             &calls.FoldersCreateCall{},
 		FoldersGetIAMPolicy:       &calls.FoldersGetIAMPolicyCall{},
 		FoldersSetIAMPolicy:       &calls.FoldersSetIAMPolicyCall{},
+		FoldersSetOrgPolicy:       &calls.FoldersSetOrgPolicyCall{},
 		ProjectsList:              &calls.ProjectsListCall{},
 		ProjectsGet:               &calls.ProjectsGetCall{},
 		ProjectsCreate:            &calls.ProjectsCreateCall{},
