@@ -124,17 +124,15 @@ func (crm *CloudResourceManager) EnableProjectServices(projectID string, service
 	}
 	for _, service := range services {
 		crm.log.ListItem(service)
-	}
-	enableServiceRequest := &suv1.BatchEnableServicesRequest{
-		ServiceIds: services,
-	}
-	servicesEnableCall := servicesService.BatchEnable(fmt.Sprintf("projects/%d", project.ProjectNumber), enableServiceRequest).Context(ctx)
-	servicesEnableOperation, err := crm.Calls.ServicesEnable.Do(servicesEnableCall)
-	if err != nil {
-		return err
-	}
-	if servicesEnableOperation.Error != nil {
-		return errors.New(servicesEnableOperation.Error.Message)
+		name := fmt.Sprintf("projects/%d/services/%s", project.ProjectNumber, service)
+		serviceEnableCall := servicesService.Enable(name, &suv1.EnableServiceRequest{}).Context(ctx)
+		serviceEnableOperation, err := crm.Calls.ServiceEnable.Do(serviceEnableCall)
+		if err != nil {
+			return err
+		}
+		if serviceEnableOperation.Error != nil {
+			return errors.New(serviceEnableOperation.Error.Message)
+		}
 	}
 	// TODO: wait for services to actually be enabled, proven difficult in current state of affairs
 	// with Google SDK/API here

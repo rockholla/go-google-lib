@@ -33,7 +33,7 @@ type projectsGetIAMPolicyMock struct{}
 type projectsGetIAMPolicyExistingMemberMock struct{}
 type projectsGetIAMPolicyExistingRoleMock struct{}
 type projectsSetIAMPolicyMock struct{}
-type servicesEnableMock struct{}
+type serviceEnableMock struct{}
 
 // Do is the mock for default projectsListMock
 func (c *projectsListMock) Do(call *v1.ProjectsListCall, opts ...googleapi.CallOption) (*v1.ListProjectsResponse, error) {
@@ -145,8 +145,7 @@ func (c *projectsSetIAMPolicyMock) Do(call *v1.ProjectsSetIamPolicyCall, opts ..
 	return &v1.Policy{}, nil
 }
 
-// Do is the mock for default servicesEnable
-func (c *servicesEnableMock) Do(call *suv1.ServicesBatchEnableCall, opts ...googleapi.CallOption) (*suv1.Operation, error) {
+func (c *serviceEnableMock) Do(call *suv1.ServicesEnableCall, opts ...googleapi.CallOption) (*suv1.Operation, error) {
 	return &suv1.Operation{}, nil
 }
 
@@ -158,7 +157,7 @@ func setProjectsCallMockDefaults(crm *CloudResourceManager) {
 		ProjectsDelete:       &projectsDeleteMock{},
 		ProjectsGetIAMPolicy: &projectsGetIAMPolicyMock{},
 		ProjectsSetIAMPolicy: &projectsSetIAMPolicyMock{},
-		ServicesEnable:       &servicesEnableMock{},
+		ServiceEnable:        &serviceEnableMock{},
 	}
 }
 

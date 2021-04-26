@@ -50,7 +50,7 @@ type Calls struct {
 	ProjectsDelete            calls.ProjectsDeleteCallInterface
 	ProjectsGetIAMPolicy      calls.ProjectsGetIAMPolicyCallInterface
 	ProjectsSetIAMPolicy      calls.ProjectsSetIAMPolicyCallInterface
-	ServicesEnable            calls.ServicesEnableCallInterface
+	ServiceEnable             calls.ServiceEnableCallInterface
 	OrganizationsGetIAMPolicy calls.OrganizationsGetIAMPolicyCallInterface
 	OrganizationsSetIAMPolicy calls.OrganizationsSetIAMPolicyCallInterface
 }
@@ -72,7 +72,7 @@ func (crm *CloudResourceManager) Initialize(credentials string, log logger.Inter
 		ProjectsDelete:            &calls.ProjectsDeleteCall{},
 		ProjectsGetIAMPolicy:      &calls.ProjectsGetIAMPolicyCall{},
 		ProjectsSetIAMPolicy:      &calls.ProjectsSetIAMPolicyCall{},
-		ServicesEnable:            &calls.ServicesEnableCall{},
+		ServiceEnable:             &calls.ServiceEnableCall{},
 		OrganizationsGetIAMPolicy: &calls.OrganizationsGetIAMPolicyCall{},
 		OrganizationsSetIAMPolicy: &calls.OrganizationsSetIAMPolicyCall{},
 	}
