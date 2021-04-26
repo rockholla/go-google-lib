@@ -118,13 +118,17 @@ func (crm *CloudResourceManager) EnableProjectServices(projectID string, service
 	ctx := context.Background()
 	servicesService := suv1.NewServicesService(crm.SUV1)
 	crm.log.Info("Ensuring service APIs are enabled in project %s:", projectID)
+	project, err := crm.GetProjectByID(projectID)
+	if err != nil {
+		return err
+	}
 	for _, service := range services {
 		crm.log.ListItem(service)
 	}
 	enableServiceRequest := &suv1.BatchEnableServicesRequest{
 		ServiceIds: services,
 	}
-	servicesEnableCall := servicesService.BatchEnable(projectID, enableServiceRequest).Context(ctx)
+	servicesEnableCall := servicesService.BatchEnable(fmt.Sprintf("projects/%d", project.ProjectNumber), enableServiceRequest).Context(ctx)
 	servicesEnableOperation, err := crm.Calls.ServicesEnable.Do(servicesEnableCall)
 	if err != nil {
 		return err
