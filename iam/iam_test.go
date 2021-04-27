@@ -6,8 +6,8 @@ import (
 	"fmt"
 	"testing"
 
-	loggermock "github.com/rockholla/go-lib/mocks/custom-mocks/logger"
 	gax "github.com/googleapis/gax-go/v2"
+	loggermock "github.com/rockholla/go-lib/mocks/custom-mocks/logger"
 	adminpb "google.golang.org/genproto/googleapis/iam/admin/v1"
 )
 
@@ -128,8 +128,33 @@ func TestEnsureServiceAccountNotFound(t *testing.T) {
 		t.Errorf("Expecting result sa display name from iam.EnsureServiceAccount() for sa that doesn't exist to be \"%s\", but got: %s",
 			testServiceAccountName, serviceAccount.Name)
 	}
+	if serviceAccount.Key != "" {
+		t.Errorf("Expecting empty result key from iam.EnsureServiceAccount() for new service account when createNewKey is false, but got: %s",
+			serviceAccount.Key)
+	}
+}
+
+func TestEnsureServiceAccountNotFoundNewKey(t *testing.T) {
+	iam := &IAM{}
+	err := iam.Initialize("", loggermock.GetLogMock())
+	if err != nil {
+		t.Errorf("Got unexpected error during iam.Initialize() with blank credentials: %s", err)
+	}
+	setMocks(iam)
+	triggerNotFound = true
+	serviceAccount := &ServiceAccount{
+		Name: testServiceAccountName,
+	}
+	err = iam.EnsureServiceAccount(testProjectID, serviceAccount, true)
+	if err != nil {
+		t.Errorf("Got unexpected error during iam.EnsureServiceAccount() for sa that doesn't exist: %s", err)
+	}
+	if serviceAccount.Name != testServiceAccountName {
+		t.Errorf("Expecting result sa display name from iam.EnsureServiceAccount() for sa that doesn't exist to be \"%s\", but got: %s",
+			testServiceAccountName, serviceAccount.Name)
+	}
 	if serviceAccount.Key != testServiceAccountKeyPrivateData {
-		t.Errorf("Expecting result key from iam.EnsureServiceAccount() for sa that doesn't exist to be \"%s\", but got: %s",
+		t.Errorf("Expecting result key from iam.EnsureServiceAccount() for sa that doesn't exist and createNewKey == true to be \"%s\", but got: %s",
 			testServiceAccountKeyPrivateData,
 			serviceAccount.Key)
 	}

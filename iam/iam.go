@@ -7,8 +7,8 @@ import (
 	"strings"
 
 	adminv1 "cloud.google.com/go/iam/admin/apiv1"
-	"github.com/rockholla/go-lib/logger"
 	gax "github.com/googleapis/gax-go/v2"
+	"github.com/rockholla/go-lib/logger"
 	"google.golang.org/api/option"
 	adminpb "google.golang.org/genproto/googleapis/iam/admin/v1"
 )
@@ -89,7 +89,7 @@ func (iam *IAM) EnsureServiceAccount(projectID string, serviceAccount *ServiceAc
 			return err
 		}
 	}
-	if createServiceAccount || createNewKey {
+	if createNewKey {
 		createServiceAccountKeyRequest := &adminpb.CreateServiceAccountKeyRequest{
 			Name: fmt.Sprintf("projects/%s/serviceAccounts/%s", projectID, serviceAccount.Email),
 		}
