@@ -99,7 +99,7 @@ func TestEnsureBucketDoesntExist(t *testing.T) {
 	// TODO: this won't test the create case block for now b/c we can't handle it with our mock transport as is, come back for it
 	mt.addResult(&http.Response{StatusCode: 200, Body: bodyReader("{}")}, nil)
 	s.Client = mockClient(t, mt)
-	err = s.EnsureBucket("bucket", "project-id")
+	err = s.EnsureBucket("bucket", "project-id", &api.BucketAttrs{})
 	if err != nil {
 		t.Errorf("Got unexpected error for storage.EnsureBucket(): %s", err)
 	}
@@ -114,7 +114,7 @@ func TestEnsureBucketExists(t *testing.T) {
 	mt := &mockTransport{}
 	mt.addResult(&http.Response{StatusCode: 200, Body: bodyReader("{}")}, nil)
 	s.Client = mockClient(t, mt)
-	err = s.EnsureBucket("bucket", "project-id")
+	err = s.EnsureBucket("bucket", "project-id", &api.BucketAttrs{})
 	if err != nil {
 		t.Errorf("Got unexpected error for storage.EnsureBucket(): %s", err)
 	}
