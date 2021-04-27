@@ -36,9 +36,10 @@ type IAM struct {
 
 // ServiceAccount is an object representing a service account
 type ServiceAccount struct {
-	Name  string
-	Email string
-	Key   string
+	Name        string
+	Email       string
+	Key         string
+	Description string
 }
 
 // Initialize sets up necessary google-provided sdks and other local data
@@ -82,6 +83,7 @@ func (iam *IAM) EnsureServiceAccount(projectID string, serviceAccount *ServiceAc
 			AccountId: serviceAccount.Name,
 			ServiceAccount: &adminpb.ServiceAccount{
 				DisplayName: serviceAccount.Name,
+				Description: serviceAccount.Description,
 			},
 		}
 		_, err := iam.AdminV1.CreateServiceAccount(ctx, createServiceAccountRequest)
