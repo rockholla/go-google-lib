@@ -40,6 +40,20 @@ func (_m *Interface) Initialize(credentials string, log logger.Interface) error 
 	return r0
 }
 
+// RemoveRoles provides a mock function with given fields: billingAccount, member, roles
+func (_m *Interface) RemoveRoles(billingAccount string, member string, roles []string) error {
+	ret := _m.Called(billingAccount, member, roles)
+
+	var r0 error
+	if rf, ok := ret.Get(0).(func(string, string, []string) error); ok {
+		r0 = rf(billingAccount, member, roles)
+	} else {
+		r0 = ret.Error(0)
+	}
+
+	return r0
+}
+
 // SetProjectBillingAccount provides a mock function with given fields: projectID, billingAccountID
 func (_m *Interface) SetProjectBillingAccount(projectID string, billingAccountID string) (string, error) {
 	ret := _m.Called(projectID, billingAccountID)

@@ -17,6 +17,7 @@ type Interface interface {
 	Initialize(credentials string, log logger.Interface) error
 	SetProjectBillingAccount(projectID string, billingAccountID string) (string, error)
 	EnsureRoles(billingAccount string, member string, roles []string) error
+	RemoveRoles(billingAccount string, member string, roles []string) error
 }
 
 // CloudBilling wraps google-provided apis for interacting with google.golang.org/api/cloudbilling/*
@@ -104,6 +105,48 @@ func (cb *CloudBilling) EnsureRoles(billingAccount string, member string, roles 
 	_, err = cb.Calls.BillingAccountsSetIAMPolicy.Do(billingAccountSetPolicyCall)
 	if err != nil {
 		return err
+	}
+	return nil
+}
+
+// RemoveRoles makes sure that a particular member is removed from a role or roles on the billing account
+func (cb *CloudBilling) RemoveRoles(billingAccount string, member string, roles []string) error {
+	ctx := context.Background()
+	if matched, _ := regexp.Match("^billingAccounts\\/", []byte(billingAccount)); !matched {
+		billingAccount = fmt.Sprintf("billingAccounts/%s", billingAccount)
+	}
+	cb.log.Info("Ensuring member %s has roles in %s:", member, billingAccount)
+	billingAccountsService := v1.NewBillingAccountsService(cb.V1)
+	billingAccountGetPolicyCall := billingAccountsService.GetIamPolicy(billingAccount).Context(ctx)
+	policy, err := cb.Calls.BillingAccountsGetIAMPolicy.Do(billingAccountGetPolicyCall)
+	if err != nil {
+		return err
+	}
+	changed := false
+	for _, role := range roles {
+		cb.log.ListItem(role)
+		binding := getExistingRoleBinding(policy.Bindings, role)
+		if binding != nil {
+			newBindingMembers := []string{}
+			for _, bindingMember := range binding.Members {
+				if bindingMember == member {
+					changed = true
+					continue
+				}
+				newBindingMembers = append(newBindingMembers, bindingMember)
+			}
+			binding.Members = newBindingMembers
+		}
+	}
+	setIAMPolicyRequest := &v1.SetIamPolicyRequest{
+		Policy: policy,
+	}
+	if changed {
+		billingAccountSetPolicyCall := billingAccountsService.SetIamPolicy(billingAccount, setIAMPolicyRequest).Context(ctx)
+		_, err = cb.Calls.BillingAccountsSetIAMPolicy.Do(billingAccountSetPolicyCall)
+		if err != nil {
+			return err
+		}
 	}
 	return nil
 }

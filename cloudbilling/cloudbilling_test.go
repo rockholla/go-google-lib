@@ -159,3 +159,31 @@ func TestEnsureRolesExistingRoleWithoutMember(t *testing.T) {
 		t.Errorf("Got unexpected error for cloudbilling.EnsureRoles() with existing role, but member not within: %s", err)
 	}
 }
+
+func TestRemoveRolesExistingMemberRole(t *testing.T) {
+	cb := &CloudBilling{}
+	err := cb.Initialize("", loggermock.GetLogMock())
+	if err != nil {
+		t.Errorf("Got unexpected error for cloudbilling.Initialize() with blank credentials: %s", err)
+	}
+	setCallMockDefaults(cb)
+	cb.Calls.BillingAccountsGetIAMPolicy = &billingAccountsGetIAMPolicyExistingMemberMock{}
+	err = cb.RemoveRoles(testBillingAccountName, testMember, []string{testRole, "role2"})
+	if err != nil {
+		t.Errorf("Got unexpected error for cloudbilling.TestRemoveRolesExistingMemberRole(): %s", err)
+	}
+}
+
+func TestRemoveRolesExistingRoleNoMember(t *testing.T) {
+	cb := &CloudBilling{}
+	err := cb.Initialize("", loggermock.GetLogMock())
+	if err != nil {
+		t.Errorf("Got unexpected error for cloudbilling.Initialize() with blank credentials: %s", err)
+	}
+	setCallMockDefaults(cb)
+	cb.Calls.BillingAccountsGetIAMPolicy = &billingAccountsGetIAMPolicyExistingRoleMock{}
+	err = cb.RemoveRoles(testBillingAccountName, testMember, []string{testRole, "role2"})
+	if err != nil {
+		t.Errorf("Got unexpected error for cloudbilling.TestRemoveRolesExistingRoleNoMember(): %s", err)
+	}
+}
