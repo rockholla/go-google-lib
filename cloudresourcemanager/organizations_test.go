@@ -114,3 +114,31 @@ func TestEnsureOrganizationRolesExistingRoleWithoutMember(t *testing.T) {
 		t.Errorf("Got unexpected error for cloudresourcemanager.EnsureOrganizationRoles() with existing role, but member not within: %s", err)
 	}
 }
+
+func TestRemoveOrganizationRolesExistingMemberRole(t *testing.T) {
+	crm := &CloudResourceManager{}
+	err := crm.Initialize("", loggermock.GetLogMock())
+	if err != nil {
+		t.Errorf("Got unexpected error for cloudresourcemanager.Initialize() with blank credentials: %s", err)
+	}
+	setOrganizationsCallMockDefaults(crm)
+	crm.Calls.OrganizationsGetIAMPolicy = &organizationsGetIAMPolicyExistingMemberMock{}
+	err = crm.RemoveOrganizationRoles(testOrganizationName, testMember, []string{testRole, "role2"})
+	if err != nil {
+		t.Errorf("Got unexpected error for cloudresourcemanager.TestRemoveOrganizationRolesExistingMemberRole(): %s", err)
+	}
+}
+
+func TestRemoveOrganizationRolesExistingRoleNoMember(t *testing.T) {
+	crm := &CloudResourceManager{}
+	err := crm.Initialize("", loggermock.GetLogMock())
+	if err != nil {
+		t.Errorf("Got unexpected error for cloudresourcemanager.Initialize() with blank credentials: %s", err)
+	}
+	setOrganizationsCallMockDefaults(crm)
+	crm.Calls.OrganizationsGetIAMPolicy = &organizationsGetIAMPolicyExistingRoleMock{}
+	err = crm.RemoveOrganizationRoles(testOrganizationName, testMember, []string{testRole, "role2"})
+	if err != nil {
+		t.Errorf("Got unexpected error for cloudresourcemanager.TestRemoveOrganizationRolesExistingRoleNoMember(): %s", err)
+	}
+}

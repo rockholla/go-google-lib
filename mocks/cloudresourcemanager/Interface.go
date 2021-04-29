@@ -214,6 +214,20 @@ func (_m *Interface) Initialize(credentials string, log logger.Interface) error 
 	return r0
 }
 
+// RemoveOrganizationRoles provides a mock function with given fields: organization, member, roles
+func (_m *Interface) RemoveOrganizationRoles(organization string, member string, roles []string) error {
+	ret := _m.Called(organization, member, roles)
+
+	var r0 error
+	if rf, ok := ret.Get(0).(func(string, string, []string) error); ok {
+		r0 = rf(organization, member, roles)
+	} else {
+		r0 = ret.Error(0)
+	}
+
+	return r0
+}
+
 // SetFolderOrgPolicy provides a mock function with given fields: folder, policy
 func (_m *Interface) SetFolderOrgPolicy(folder string, policy *v1.OrgPolicy) error {
 	ret := _m.Called(folder, policy)

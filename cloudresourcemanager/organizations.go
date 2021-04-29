@@ -44,6 +44,48 @@ func (crm *CloudResourceManager) EnsureOrganizationRoles(organization string, me
 	return nil
 }
 
+// RemoveOrganizationRoles if found, removes a role or roles at the organization level for a particular member
+func (crm *CloudResourceManager) RemoveOrganizationRoles(organization string, member string, roles []string) error {
+	ctx := context.Background()
+	if matched, _ := regexp.Match("^organizations\\/", []byte(organization)); !matched {
+		organization = fmt.Sprintf("organizations/%s", organization)
+	}
+	crm.log.Info("Ensuring roles for member %s are removed in %s:", member, organization)
+	organizationsService := v1.NewOrganizationsService(crm.V1)
+	organizationPolicyGetCall := organizationsService.GetIamPolicy(organization, &v1.GetIamPolicyRequest{}).Context(ctx)
+	policy, err := crm.Calls.OrganizationsGetIAMPolicy.Do(organizationPolicyGetCall)
+	if err != nil {
+		return err
+	}
+	changed := false
+	for _, role := range roles {
+		crm.log.ListItem(role)
+		binding := getExistingOrganizationRoleBinding(policy.Bindings, role)
+		if binding != nil {
+			newBindingMembers := []string{}
+			for _, bindingMember := range binding.Members {
+				if bindingMember == member {
+					changed = true
+					continue
+				}
+				newBindingMembers = append(newBindingMembers, bindingMember)
+			}
+			binding.Members = newBindingMembers
+		}
+	}
+	setIAMPolicyRequest := &v1.SetIamPolicyRequest{
+		Policy: policy,
+	}
+	if changed {
+		organizationSetPolicyCall := organizationsService.SetIamPolicy(organization, setIAMPolicyRequest).Context(ctx)
+		_, err = crm.Calls.OrganizationsSetIAMPolicy.Do(organizationSetPolicyCall)
+		if err != nil {
+			return err
+		}
+	}
+	return nil
+}
+
 func getExistingOrganizationRoleBinding(bindings []*v1.Binding, role string) *v1.Binding {
 	for _, binding := range bindings {
 		if binding.Role == role {

@@ -26,6 +26,7 @@ type Interface interface {
 	EnableProjectServices(projectID string, services []string) error
 	EnsureProjectRoles(project string, member string, roles []string) error
 	EnsureOrganizationRoles(organization string, member string, roles []string) error
+	RemoveOrganizationRoles(organization string, member string, roles []string) error
 }
 
 // CloudResourceManager wraps google-provided apis for interacting with google.golang.org/api/cloudresourcemanager/*
