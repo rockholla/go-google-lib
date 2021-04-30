@@ -36,6 +36,7 @@ type IAM struct {
 
 // ServiceAccount is an object representing a service account
 type ServiceAccount struct {
+	ID          string
 	Name        string
 	Email       string
 	Key         string
@@ -86,10 +87,11 @@ func (iam *IAM) EnsureServiceAccount(projectID string, serviceAccount *ServiceAc
 				Description: serviceAccount.Description,
 			},
 		}
-		_, err := iam.AdminV1.CreateServiceAccount(ctx, createServiceAccountRequest)
+		created, err := iam.AdminV1.CreateServiceAccount(ctx, createServiceAccountRequest)
 		if err != nil {
 			return err
 		}
+		serviceAccount.ID = created.UniqueId
 	}
 	if createNewKey {
 		createServiceAccountKeyRequest := &adminpb.CreateServiceAccountKeyRequest{
