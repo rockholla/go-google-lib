@@ -57,7 +57,6 @@ func (ci *CloudIdentity) Initialize(impersonateServiceAccountEmail string, log l
 func (ci *CloudIdentity) EnsureGroup(name string, domain string, customerID string) error {
 	ctx := context.Background()
 	groupsService := v1beta1.NewGroupsService(ci.V1Beta1)
-	fullGroupName := fmt.Sprintf("group/%s", name)
 	groupKeyID := fmt.Sprintf("%s@%s", name, domain)
 	fullCustomerID := fmt.Sprintf("customers/%s", customerID)
 	ci.log.Info("Ensuring cloud identity %s in %s:", groupKeyID, fullCustomerID)
@@ -73,7 +72,6 @@ func (ci *CloudIdentity) EnsureGroup(name string, domain string, customerID stri
 		GroupKey: &v1beta1.EntityKey{
 			Id: groupKeyID,
 		},
-		Name:   fullGroupName,
 		Parent: fullCustomerID,
 	}).Context(ctx)
 	if _, err = ci.Calls.GroupCreate.Do(groupCreateCall); err != nil {
