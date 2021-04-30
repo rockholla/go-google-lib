@@ -65,9 +65,11 @@ func (ci *CloudIdentity) EnsureGroup(name string, domain string, customerID stri
 	_, err := ci.Calls.GroupGet.Do(groupGetCall)
 	if err != nil {
 		if s, ok := grpcstatus.FromError(err); ok {
-			if s.Code() != grpccodes.AlreadyExists {
+			if s.Code() != grpccodes.NotFound {
 				return err
 			}
+		} else {
+			return err
 		}
 	} else {
 		ci.log.InfoPart("already exists\n")

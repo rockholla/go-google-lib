@@ -1,12 +1,13 @@
 package cloudidentity
 
 import (
-	"errors"
 	"testing"
 
 	loggermock "github.com/rockholla/go-lib/mocks/custom-mocks/logger"
 	v1beta1 "google.golang.org/api/cloudidentity/v1beta1"
 	googleapi "google.golang.org/api/googleapi"
+	"google.golang.org/grpc/codes"
+	"google.golang.org/grpc/status"
 )
 
 var triggerGroupNotFound = false
@@ -17,7 +18,8 @@ type groupCreateMock struct{}
 func (c *groupGetMock) Do(call *v1beta1.GroupsGetCall, opts ...googleapi.CallOption) (*v1beta1.Group, error) {
 	if triggerGroupNotFound {
 		triggerGroupNotFound = false
-		return nil, errors.New("was not found")
+		st := status.New(codes.NotFound, "not found")
+		return nil, st.Err()
 	}
 	return &v1beta1.Group{}, nil
 }
@@ -55,6 +57,19 @@ func TestEnsureGroupNotExists(t *testing.T) {
 	triggerGroupNotFound = true
 	err = ci.EnsureGroup("name", "domain", "customer-id")
 	if err != nil {
-		t.Errorf("Got unexpected error during cloudidentity.EnsureGroup(): %s", err)
+		t.Errorf("Got unexpected error during cloudidentity.TestEnsureGroupExists(): %s", err)
+	}
+}
+
+func TestEnsureGroupExists(t *testing.T) {
+	ci := &CloudIdentity{}
+	err := ci.Initialize("", loggermock.GetLogMock())
+	if err != nil {
+		t.Errorf("Got unexpected error for cloudidentity.Initialize() with blank credentials: %s", err)
+	}
+	setCallMockDefaults(ci)
+	err = ci.EnsureGroup("name", "domain", "customer-id")
+	if err != nil {
+		t.Errorf("Got unexpected error during cloudidentity.TestEnsureGroupExists(): %s", err)
 	}
 }
