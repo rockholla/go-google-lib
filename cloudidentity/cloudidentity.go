@@ -4,6 +4,7 @@ package cloudidentity
 import (
 	"context"
 	"fmt"
+	"strings"
 
 	"github.com/rockholla/go-google-lib/cloudidentity/calls"
 	"github.com/rockholla/go-lib/logger"
@@ -68,7 +69,7 @@ func (ci *CloudIdentity) EnsureGroup(name string, domain string, customerID stri
 			if s.Code() != grpccodes.NotFound {
 				return err
 			}
-		} else {
+		} else if !strings.Contains(err.Error(), "code 404") {
 			return err
 		}
 	} else {
