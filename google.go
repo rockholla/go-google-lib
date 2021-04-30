@@ -4,6 +4,7 @@ package google
 import (
 	"github.com/rockholla/go-google-lib/admin"
 	"github.com/rockholla/go-google-lib/cloudbilling"
+	"github.com/rockholla/go-google-lib/cloudidentity"
 	"github.com/rockholla/go-google-lib/cloudresourcemanager"
 	"github.com/rockholla/go-google-lib/compute"
 	"github.com/rockholla/go-google-lib/deploymentmanager"
@@ -23,6 +24,7 @@ type Interface interface {
 	GetStorage() (storage.Interface, error)
 	GetCompute() (compute.Interface, error)
 	GetDNS() (dns.Interface, error)
+	GetCloudIdentity() (cloudidentity.Interface, error)
 	GetAdmin(credentialsJSON string, domain string, adminUsername string) (admin.Interface, error)
 }
 
@@ -37,6 +39,7 @@ type Google struct {
 	storage              storage.Interface
 	compute              compute.Interface
 	dns                  dns.Interface
+	cloudIdentity        cloudidentity.Interface
 	admin                admin.Interface
 }
 
@@ -119,6 +122,16 @@ func (google *Google) GetDNS() (dns.Interface, error) {
 		err = google.dns.Initialize(google.credentials, google.log)
 	}
 	return google.dns, err
+}
+
+// GetCloudIdentity will get the cloud identity library
+func (google *Google) GetCloudIdentity() (cloudidentity.Interface, error) {
+	var err error
+	if google.cloudIdentity == nil {
+		google.cloudIdentity = &cloudidentity.CloudIdentity{}
+		err = google.cloudIdentity.Initialize(google.credentials, google.log)
+	}
+	return google.cloudIdentity, err
 }
 
 // GetAdmin will get the admin library

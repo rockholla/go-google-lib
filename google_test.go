@@ -112,6 +112,19 @@ func TestGetDNS(t *testing.T) {
 	}
 }
 
+func TestGetCloudIdentity(t *testing.T) {
+	var err error
+	g := &Google{}
+	_, err = g.GetCloudIdentity()
+	if err != nil {
+		t.Errorf("Got unexpected error from google.GetCloudIdentity(): %s", err)
+	}
+	_, err = g.GetCloudIdentity()
+	if err != nil {
+		t.Errorf("Got unexpected error from google.GetCloudIdentity() second run: %s", err)
+	}
+}
+
 func TestGetAdmin(t *testing.T) {
 	var err error
 	g := &Google{}

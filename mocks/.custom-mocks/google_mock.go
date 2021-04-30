@@ -3,6 +3,7 @@ package googlemock
 import (
 	"github.com/rockholla/go-google-lib/admin"
 	"github.com/rockholla/go-google-lib/cloudbilling"
+	"github.com/rockholla/go-google-lib/cloudidentity"
 	"github.com/rockholla/go-google-lib/cloudresourcemanager"
 	"github.com/rockholla/go-google-lib/compute"
 	"github.com/rockholla/go-google-lib/deploymentmanager"
@@ -10,6 +11,7 @@ import (
 	"github.com/rockholla/go-google-lib/iam"
 	adminmock "github.com/rockholla/go-google-lib/mocks/admin"
 	cloudbillingmock "github.com/rockholla/go-google-lib/mocks/cloudbilling"
+	cloudidentitymock "github.com/rockholla/go-google-lib/mocks/cloudidentity"
 	cloudresourcemanagermock "github.com/rockholla/go-google-lib/mocks/cloudresourcemanager"
 	computemock "github.com/rockholla/go-google-lib/mocks/compute"
 	deploymentmanagermock "github.com/rockholla/go-google-lib/mocks/deploymentmanager"
@@ -33,6 +35,7 @@ import (
 type GoogleMock struct {
 	CloudResourceManager *cloudresourcemanagermock.Interface
 	CloudBilling         *cloudbillingmock.Interface
+	CloudIdentity        *cloudidentitymock.Interface
 	Admin                *adminmock.Interface
 	Compute              *computemock.Interface
 	DeploymentManager    *deploymentmanagermock.Interface
@@ -52,6 +55,11 @@ func (m *GoogleMock) GetCloudResourceManager() (cloudresourcemanager.Interface, 
 // GetCloudBilling mock
 func (m *GoogleMock) GetCloudBilling() (cloudbilling.Interface, error) {
 	return m.CloudBilling, nil
+}
+
+// GetCloudIdentity mock
+func (m *GoogleMock) GetCloudIdentity() (cloudidentity.Interface, error) {
+	return m.CloudIdentity, nil
 }
 
 // GetIAM mock

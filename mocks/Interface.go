@@ -6,6 +6,8 @@ import (
 	admin "github.com/rockholla/go-google-lib/admin"
 	cloudbilling "github.com/rockholla/go-google-lib/cloudbilling"
 
+	cloudidentity "github.com/rockholla/go-google-lib/cloudidentity"
+
 	cloudresourcemanager "github.com/rockholla/go-google-lib/cloudresourcemanager"
 
 	compute "github.com/rockholla/go-google-lib/compute"
@@ -61,6 +63,29 @@ func (_m *Interface) GetCloudBilling() (cloudbilling.Interface, error) {
 	} else {
 		if ret.Get(0) != nil {
 			r0 = ret.Get(0).(cloudbilling.Interface)
+		}
+	}
+
+	var r1 error
+	if rf, ok := ret.Get(1).(func() error); ok {
+		r1 = rf()
+	} else {
+		r1 = ret.Error(1)
+	}
+
+	return r0, r1
+}
+
+// GetCloudIdentity provides a mock function with given fields:
+func (_m *Interface) GetCloudIdentity() (cloudidentity.Interface, error) {
+	ret := _m.Called()
+
+	var r0 cloudidentity.Interface
+	if rf, ok := ret.Get(0).(func() cloudidentity.Interface); ok {
+		r0 = rf()
+	} else {
+		if ret.Get(0) != nil {
+			r0 = ret.Get(0).(cloudidentity.Interface)
 		}
 	}
 
