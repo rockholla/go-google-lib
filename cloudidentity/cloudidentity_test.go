@@ -11,6 +11,7 @@ import (
 	"google.golang.org/grpc/status"
 )
 
+var testGroupName = "groups/029283028203"
 var triggerGroupAlreadyExists = false
 var triggerGroupAlreadyExistsRaw = false
 var groupAlreadyExistsErrorRaw = `Error: googleapi: got HTTP response code 409 with body: <!DOCTYPE html>
@@ -26,8 +27,8 @@ var groupAlreadyExistsErrorRaw = `Error: googleapi: got HTTP response code 409 w
   <p>The requested URL <code>/v1beta1/group?alt=json&amp;prettyPrint=false</code> alreadyExists.  <ins>That’s all we know.</ins>
 `
 
-type groupGetMock struct{}
 type groupCreateMock struct{}
+type groupLookupMock struct{}
 
 func (c *groupCreateMock) Do(call *v1beta1.GroupsCreateCall, opts ...googleapi.CallOption) (*v1beta1.Operation, error) {
 	if triggerGroupAlreadyExists {
@@ -42,9 +43,16 @@ func (c *groupCreateMock) Do(call *v1beta1.GroupsCreateCall, opts ...googleapi.C
 	return &v1beta1.Operation{}, nil
 }
 
+func (c *groupLookupMock) Do(call *v1beta1.GroupsLookupCall, opts ...googleapi.CallOption) (*v1beta1.LookupGroupNameResponse, error) {
+	return &v1beta1.LookupGroupNameResponse{
+		Name: testGroupName,
+	}, nil
+}
+
 func setCallMockDefaults(ci *CloudIdentity) {
 	ci.Calls = &Calls{
 		GroupCreate: &groupCreateMock{},
+		GroupLookup: &groupLookupMock{},
 	}
 }
 
@@ -67,7 +75,7 @@ func TestEnsureGroupCreate(t *testing.T) {
 		t.Errorf("Got unexpected error for cloudidentity.Initialize() with blank credentials: %s", err)
 	}
 	setCallMockDefaults(ci)
-	err = ci.EnsureGroup("name", "domain", "customer-id")
+	_, err = ci.EnsureGroup("name", "domain", "customer-id")
 	if err != nil {
 		t.Errorf("Got unexpected error during cloudidentity.TestEnsureGroupCreate(): %s", err)
 	}
@@ -81,7 +89,7 @@ func TestEnsureGroupAlreadyExists(t *testing.T) {
 	}
 	setCallMockDefaults(ci)
 	triggerGroupAlreadyExists = true
-	err = ci.EnsureGroup("name", "domain", "customer-id")
+	_, err = ci.EnsureGroup("name", "domain", "customer-id")
 	if err != nil {
 		t.Errorf("Got unexpected error during cloudidentity.TestEnsureGroupAlreadyExists(): %s", err)
 	}
@@ -95,7 +103,7 @@ func TestEnsureGroupAlreadyExistsRawError(t *testing.T) {
 	}
 	setCallMockDefaults(ci)
 	triggerGroupAlreadyExistsRaw = true
-	err = ci.EnsureGroup("name", "domain", "customer-id")
+	_, err = ci.EnsureGroup("name", "domain", "customer-id")
 	if err != nil {
 		t.Errorf("Got unexpected error during cloudidentity.TestEnsureGroupAlreadyExistsRawError(): %s", err)
 	}

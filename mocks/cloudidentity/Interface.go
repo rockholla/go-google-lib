@@ -3,7 +3,10 @@
 package mocks
 
 import (
+	cloudidentity "google.golang.org/api/cloudidentity/v1beta1"
+
 	logger "github.com/rockholla/go-lib/logger"
+
 	mock "github.com/stretchr/testify/mock"
 )
 
@@ -13,17 +16,26 @@ type Interface struct {
 }
 
 // EnsureGroup provides a mock function with given fields: name, domain, customerID
-func (_m *Interface) EnsureGroup(name string, domain string, customerID string) error {
+func (_m *Interface) EnsureGroup(name string, domain string, customerID string) (*cloudidentity.Group, error) {
 	ret := _m.Called(name, domain, customerID)
 
-	var r0 error
-	if rf, ok := ret.Get(0).(func(string, string, string) error); ok {
+	var r0 *cloudidentity.Group
+	if rf, ok := ret.Get(0).(func(string, string, string) *cloudidentity.Group); ok {
 		r0 = rf(name, domain, customerID)
 	} else {
-		r0 = ret.Error(0)
+		if ret.Get(0) != nil {
+			r0 = ret.Get(0).(*cloudidentity.Group)
+		}
 	}
 
-	return r0
+	var r1 error
+	if rf, ok := ret.Get(1).(func(string, string, string) error); ok {
+		r1 = rf(name, domain, customerID)
+	} else {
+		r1 = ret.Error(1)
+	}
+
+	return r0, r1
 }
 
 // Initialize provides a mock function with given fields: impersonateServiceAccountEmail, log
