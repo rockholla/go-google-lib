@@ -115,13 +115,26 @@ func TestGetDNS(t *testing.T) {
 func TestGetCloudIdentity(t *testing.T) {
 	var err error
 	g := &Google{}
-	_, err = g.GetCloudIdentity()
+	_, err = g.GetCloudIdentity("")
 	if err != nil {
 		t.Errorf("Got unexpected error from google.GetCloudIdentity(): %s", err)
 	}
-	_, err = g.GetCloudIdentity()
+	_, err = g.GetCloudIdentity("")
 	if err != nil {
 		t.Errorf("Got unexpected error from google.GetCloudIdentity() second run: %s", err)
+	}
+}
+
+func TestGetCloudIdentityImpersonate(t *testing.T) {
+	var err error
+	g := &Google{}
+	_, err = g.GetCloudIdentity("impersonate@sa")
+	if err != nil {
+		t.Errorf("Got unexpected error from google.TestGetCloudIdentityCustomCreds(): %s", err)
+	}
+	_, err = g.GetCloudIdentity("impersonate@sa")
+	if err != nil {
+		t.Errorf("Got unexpected error from google.TestGetCloudIdentityCustomCreds() second run: %s", err)
 	}
 }
 

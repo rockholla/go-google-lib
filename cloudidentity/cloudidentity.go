@@ -15,7 +15,7 @@ import (
 
 // Interface represents functionality for CloudBilling
 type Interface interface {
-	Initialize(credentials string, log logger.Interface) error
+	Initialize(impersonateServiceAccountEmail string, log logger.Interface) error
 	EnsureGroup(name string, domain string, customerID string) error
 }
 
@@ -33,7 +33,7 @@ type Calls struct {
 }
 
 // Initialize sets up necessary google-provided sdks and other local data
-func (ci *CloudIdentity) Initialize(credentials string, log logger.Interface) error {
+func (ci *CloudIdentity) Initialize(impersonateServiceAccountEmail string, log logger.Interface) error {
 	var err error
 	ctx := context.Background()
 	ci.log = log
@@ -41,8 +41,8 @@ func (ci *CloudIdentity) Initialize(credentials string, log logger.Interface) er
 		GroupGet:    &calls.GroupGetCall{},
 		GroupCreate: &calls.GroupCreateCall{},
 	}
-	if credentials != "" {
-		if ci.V1Beta1, err = v1beta1.NewService(ctx, option.WithCredentialsJSON([]byte(credentials))); err != nil {
+	if impersonateServiceAccountEmail != "" {
+		if ci.V1Beta1, err = v1beta1.NewService(ctx, option.ImpersonateCredentials(impersonateServiceAccountEmail)); err != nil {
 			return err
 		}
 	} else {

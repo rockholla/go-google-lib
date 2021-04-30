@@ -58,7 +58,7 @@ func (m *GoogleMock) GetCloudBilling() (cloudbilling.Interface, error) {
 }
 
 // GetCloudIdentity mock
-func (m *GoogleMock) GetCloudIdentity() (cloudidentity.Interface, error) {
+func (m *GoogleMock) GetCloudIdentity(credentialsJSON string) (cloudidentity.Interface, error) {
 	return m.CloudIdentity, nil
 }
 

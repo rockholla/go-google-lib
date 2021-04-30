@@ -8,15 +8,6 @@ import (
 	googleapi "google.golang.org/api/googleapi"
 )
 
-const (
-	testCredentials = `{
-  "client_id": "xxxxxxx.apps.googleusercontent.com",
-  "client_secret": "xxxxxxxxxxxxxxx",
-  "refresh_token": "xxxxxxxxx",
-  "type": "authorized_user"
-}`
-)
-
 type groupGetMock struct{}
 type groupCreateMock struct{}
 
@@ -41,7 +32,7 @@ func TestInitialize(t *testing.T) {
 	if err != nil {
 		t.Errorf("Got unexpected error during cloudidentity.Initialize() with blank credentials: %s", err)
 	}
-	err = ci.Initialize(testCredentials, loggermock.GetLogMock())
+	err = ci.Initialize("impersonate@sa", loggermock.GetLogMock())
 	if err != nil {
 		t.Errorf("Got unexpected error during cloudidentity.Initialize() with explicit credentials: %s", err)
 	}

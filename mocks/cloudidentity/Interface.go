@@ -26,13 +26,13 @@ func (_m *Interface) EnsureGroup(name string, domain string, customerID string) 
 	return r0
 }
 
-// Initialize provides a mock function with given fields: credentials, log
-func (_m *Interface) Initialize(credentials string, log logger.Interface) error {
-	ret := _m.Called(credentials, log)
+// Initialize provides a mock function with given fields: impersonateServiceAccountEmail, log
+func (_m *Interface) Initialize(impersonateServiceAccountEmail string, log logger.Interface) error {
+	ret := _m.Called(impersonateServiceAccountEmail, log)
 
 	var r0 error
 	if rf, ok := ret.Get(0).(func(string, logger.Interface) error); ok {
-		r0 = rf(credentials, log)
+		r0 = rf(impersonateServiceAccountEmail, log)
 	} else {
 		r0 = ret.Error(0)
 	}

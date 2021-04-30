@@ -24,7 +24,7 @@ type Interface interface {
 	GetStorage() (storage.Interface, error)
 	GetCompute() (compute.Interface, error)
 	GetDNS() (dns.Interface, error)
-	GetCloudIdentity() (cloudidentity.Interface, error)
+	GetCloudIdentity(impersonateServiceAccountEmail string) (cloudidentity.Interface, error)
 	GetAdmin(credentialsJSON string, domain string, adminUsername string) (admin.Interface, error)
 }
 
@@ -125,11 +125,11 @@ func (google *Google) GetDNS() (dns.Interface, error) {
 }
 
 // GetCloudIdentity will get the cloud identity library
-func (google *Google) GetCloudIdentity() (cloudidentity.Interface, error) {
+func (google *Google) GetCloudIdentity(impersonateServiceAccountEmail string) (cloudidentity.Interface, error) {
 	var err error
 	if google.cloudIdentity == nil {
 		google.cloudIdentity = &cloudidentity.CloudIdentity{}
-		err = google.cloudIdentity.Initialize(google.credentials, google.log)
+		err = google.cloudIdentity.Initialize(impersonateServiceAccountEmail, google.log)
 	}
 	return google.cloudIdentity, err
 }

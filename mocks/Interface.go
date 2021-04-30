@@ -76,13 +76,13 @@ func (_m *Interface) GetCloudBilling() (cloudbilling.Interface, error) {
 	return r0, r1
 }
 
-// GetCloudIdentity provides a mock function with given fields:
-func (_m *Interface) GetCloudIdentity() (cloudidentity.Interface, error) {
-	ret := _m.Called()
+// GetCloudIdentity provides a mock function with given fields: impersonateServiceAccountEmail
+func (_m *Interface) GetCloudIdentity(impersonateServiceAccountEmail string) (cloudidentity.Interface, error) {
+	ret := _m.Called(impersonateServiceAccountEmail)
 
 	var r0 cloudidentity.Interface
-	if rf, ok := ret.Get(0).(func() cloudidentity.Interface); ok {
-		r0 = rf()
+	if rf, ok := ret.Get(0).(func(string) cloudidentity.Interface); ok {
+		r0 = rf(impersonateServiceAccountEmail)
 	} else {
 		if ret.Get(0) != nil {
 			r0 = ret.Get(0).(cloudidentity.Interface)
@@ -90,8 +90,8 @@ func (_m *Interface) GetCloudIdentity() (cloudidentity.Interface, error) {
 	}
 
 	var r1 error
-	if rf, ok := ret.Get(1).(func() error); ok {
-		r1 = rf()
+	if rf, ok := ret.Get(1).(func(string) error); ok {
+		r1 = rf(impersonateServiceAccountEmail)
 	} else {
 		r1 = ret.Error(1)
 	}
