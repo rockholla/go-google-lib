@@ -4,13 +4,14 @@ package cloudidentity
 import (
 	"context"
 	"fmt"
-	"strings"
 
 	"github.com/rockholla/go-google-lib/cloudidentity/calls"
 	"github.com/rockholla/go-lib/logger"
 	v1 "google.golang.org/api/cloudidentity/v1beta1"
 	v1beta1 "google.golang.org/api/cloudidentity/v1beta1"
 	"google.golang.org/api/option"
+	grpccodes "google.golang.org/grpc/codes"
+	grpcstatus "google.golang.org/grpc/status"
 )
 
 // Interface represents functionality for CloudBilling
@@ -63,9 +64,10 @@ func (ci *CloudIdentity) EnsureGroup(name string, domain string, customerID stri
 	groupGetCall := groupsService.Get(name).Context(ctx)
 	_, err := ci.Calls.GroupGet.Do(groupGetCall)
 	if err != nil {
-		fmt.Println(err)
-		if !strings.Contains(err.Error(), "was not found") {
-			return err
+		if s, ok := grpcstatus.FromError(err); ok {
+			if s.Code() != grpccodes.AlreadyExists {
+				return err
+			}
 		}
 	} else {
 		ci.log.InfoPart("already exists\n")

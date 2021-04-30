@@ -58,16 +58,3 @@ func TestEnsureGroupNotExists(t *testing.T) {
 		t.Errorf("Got unexpected error during cloudidentity.EnsureGroup(): %s", err)
 	}
 }
-
-func TestEnsureGroupExists(t *testing.T) {
-	ci := &CloudIdentity{}
-	err := ci.Initialize("", loggermock.GetLogMock())
-	if err != nil {
-		t.Errorf("Got unexpected error for cloudidentity.Initialize() with blank credentials: %s", err)
-	}
-	setCallMockDefaults(ci)
-	err = ci.EnsureGroup("name", "domain", "customer-id")
-	if err != nil {
-		t.Errorf("Got unexpected error during cloudidentity.EnsureGroup(): %s", err)
-	}
-}
