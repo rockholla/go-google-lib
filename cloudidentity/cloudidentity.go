@@ -79,7 +79,8 @@ func (ci *CloudIdentity) EnsureGroup(name string, domain string, customerID stri
 			return err
 		}
 		ci.log.InfoPart("already exists\n")
+	} else {
+		ci.log.InfoPart("created\n")
 	}
-	ci.log.InfoPart("created\n")
 	return nil
 }
