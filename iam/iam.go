@@ -70,13 +70,15 @@ func (iam *IAM) EnsureServiceAccount(projectID string, serviceAccount *ServiceAc
 	getServiceAccountRequest := &adminpb.GetServiceAccountRequest{
 		Name: fmt.Sprintf("projects/%s/serviceAccounts/%s", projectID, serviceAccount.Email),
 	}
-	_, err := iam.AdminV1.GetServiceAccount(ctx, getServiceAccountRequest)
+	existing, err := iam.AdminV1.GetServiceAccount(ctx, getServiceAccountRequest)
 	if err != nil {
 		if strings.Contains(strings.ToLower(err.Error()), "notfound") {
 			createServiceAccount = true
 		} else {
 			return err
 		}
+	} else {
+		serviceAccount.ID = existing.UniqueId
 	}
 	if createServiceAccount {
 		createServiceAccountRequest := &adminpb.CreateServiceAccountRequest{
