@@ -11,8 +11,8 @@ import (
 	v1 "google.golang.org/api/cloudidentity/v1beta1"
 	v1beta1 "google.golang.org/api/cloudidentity/v1beta1"
 	"google.golang.org/api/option"
-	grpccodes "google.golang.org/grpc/codes"
-	grpcstatus "google.golang.org/grpc/status"
+	"google.golang.org/grpc/codes"
+	"google.golang.org/grpc/status"
 )
 
 // Interface represents functionality for CloudBilling
@@ -30,7 +30,6 @@ type CloudIdentity struct {
 
 // Calls are interfaces for making the actual calls to various underlying apis
 type Calls struct {
-	GroupGet    calls.GroupGetCallInterface
 	GroupCreate calls.GroupCreateCallInterface
 }
 
@@ -40,7 +39,6 @@ func (ci *CloudIdentity) Initialize(impersonateServiceAccountEmail string, log l
 	ctx := context.Background()
 	ci.log = log
 	ci.Calls = &Calls{
-		GroupGet:    &calls.GroupGetCall{},
 		GroupCreate: &calls.GroupCreateCall{},
 	}
 	if impersonateServiceAccountEmail != "" {
@@ -62,21 +60,6 @@ func (ci *CloudIdentity) EnsureGroup(name string, domain string, customerID stri
 	groupKeyID := fmt.Sprintf("%s@%s", name, domain)
 	fullCustomerID := fmt.Sprintf("customers/%s", customerID)
 	ci.log.InfoPart("Ensuring cloud identity group %s exists in %s...", groupKeyID, fullCustomerID)
-	groupGetCall := groupsService.Get(fmt.Sprintf("groups/%s", name)).Context(ctx)
-	_, err := ci.Calls.GroupGet.Do(groupGetCall)
-	if err != nil {
-		if s, ok := grpcstatus.FromError(err); ok {
-			if s.Code() != grpccodes.NotFound {
-				return err
-			}
-		} else if !strings.Contains(err.Error(), "code 404") {
-			return err
-		}
-	} else {
-		ci.log.InfoPart("already exists\n")
-		return nil
-	}
-	ci.log.InfoPart("creating\n")
 	groupCreateCall := groupsService.Create(&v1beta1.Group{
 		DisplayName: name,
 		GroupKey: &v1beta1.EntityKey{
@@ -87,8 +70,16 @@ func (ci *CloudIdentity) EnsureGroup(name string, domain string, customerID stri
 			"cloudidentity.googleapis.com/groups.discussion_forum": "",
 		},
 	}).Context(ctx).InitialGroupConfig("WITH_INITIAL_OWNER")
-	if _, err = ci.Calls.GroupCreate.Do(groupCreateCall); err != nil {
-		return err
+	if _, err := ci.Calls.GroupCreate.Do(groupCreateCall); err != nil {
+		if s, ok := status.FromError(err); ok {
+			if s.Code() != codes.AlreadyExists {
+				return err
+			}
+		} else if !strings.Contains(err.Error(), "alreadyExists") {
+			return err
+		}
+		ci.log.InfoPart("already exists\n")
 	}
+	ci.log.InfoPart("created\n")
 	return nil
 }
