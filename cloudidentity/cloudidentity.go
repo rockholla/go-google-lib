@@ -63,6 +63,7 @@ func (ci *CloudIdentity) EnsureGroup(name string, domain string, customerID stri
 	groupGetCall := groupsService.Get(name).Context(ctx)
 	_, err := ci.Calls.GroupGet.Do(groupGetCall)
 	if err != nil {
+		fmt.Println(err)
 		if !strings.Contains(err.Error(), "was not found") {
 			return err
 		}
