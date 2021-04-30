@@ -59,7 +59,7 @@ func (ci *CloudIdentity) EnsureGroup(name string, domain string, customerID stri
 	groupsService := v1beta1.NewGroupsService(ci.V1Beta1)
 	groupKeyID := fmt.Sprintf("%s@%s", name, domain)
 	fullCustomerID := fmt.Sprintf("customers/%s", customerID)
-	ci.log.Info("Ensuring cloud identity %s in %s:", groupKeyID, fullCustomerID)
+	ci.log.Info("Ensuring cloud identity %s in %s", groupKeyID, fullCustomerID)
 	groupGetCall := groupsService.Get(name).Context(ctx)
 	_, err := ci.Calls.GroupGet.Do(groupGetCall)
 	if err != nil {
