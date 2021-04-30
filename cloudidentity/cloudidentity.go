@@ -4,6 +4,7 @@ package cloudidentity
 import (
 	"context"
 	"fmt"
+	"strings"
 
 	"github.com/rockholla/go-google-lib/cloudidentity/calls"
 	"github.com/rockholla/go-lib/logger"
@@ -63,7 +64,9 @@ func (ci *CloudIdentity) EnsureGroup(name string, domain string, customerID stri
 	groupGetCall := groupsService.Get(name).Context(ctx)
 	_, err := ci.Calls.GroupGet.Do(groupGetCall)
 	if err != nil {
-		return err
+		if !strings.Contains(err.Error(), "was not found") {
+			return err
+		}
 	}
 	groupCreateCall := groupsService.Create(&v1beta1.Group{
 		DisplayName: name,
