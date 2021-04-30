@@ -73,6 +73,9 @@ func (ci *CloudIdentity) EnsureGroup(name string, domain string, customerID stri
 			Id: groupKeyID,
 		},
 		Parent: fullCustomerID,
+		Labels: map[string]string{
+			"cloudidentity.googleapis.com/groups.discussion_forum": "",
+		},
 	}).Context(ctx)
 	if _, err = ci.Calls.GroupCreate.Do(groupCreateCall); err != nil {
 		return err
