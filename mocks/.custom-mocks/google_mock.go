@@ -17,7 +17,9 @@ import (
 	deploymentmanagermock "github.com/rockholla/go-google-lib/mocks/deploymentmanager"
 	dnsmock "github.com/rockholla/go-google-lib/mocks/dns"
 	iammock "github.com/rockholla/go-google-lib/mocks/iam"
+	oauthmock "github.com/rockholla/go-google-lib/mocks/oauth"
 	storagemock "github.com/rockholla/go-google-lib/mocks/storage"
+	"github.com/rockholla/go-google-lib/oauth"
 	"github.com/rockholla/go-google-lib/storage"
 	"github.com/rockholla/go-lib/logger"
 )
@@ -42,6 +44,7 @@ type GoogleMock struct {
 	DNS                  *dnsmock.Interface
 	IAM                  *iammock.Interface
 	Storage              *storagemock.Interface
+	OAuth                *oauthmock.Interface
 }
 
 // Initialize is a no-op in the mock
@@ -90,4 +93,9 @@ func (m *GoogleMock) GetDNS() (dns.Interface, error) {
 // GetAdmin mock
 func (m *GoogleMock) GetAdmin(credentialsJSON string, domain string, adminUsername string) (admin.Interface, error) {
 	return m.Admin, nil
+}
+
+// GetOAuth mock
+func (m *GoogleMock) GetOAuth(scopes []string) (oauth.Interface, error) {
+	return m.OAuth, nil
 }
