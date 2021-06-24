@@ -10,6 +10,7 @@ import (
 	"github.com/rockholla/go-google-lib/deploymentmanager"
 	"github.com/rockholla/go-google-lib/dns"
 	"github.com/rockholla/go-google-lib/iam"
+	"github.com/rockholla/go-google-lib/oauth"
 	"github.com/rockholla/go-google-lib/storage"
 	"github.com/rockholla/go-lib/logger"
 )
@@ -26,6 +27,7 @@ type Interface interface {
 	GetDNS() (dns.Interface, error)
 	GetCloudIdentity(impersonateServiceAccountEmail string) (cloudidentity.Interface, error)
 	GetAdmin(credentialsJSON string, domain string, adminUsername string) (admin.Interface, error)
+	GetOAuth(scopes []string) (oauth.Interface, error)
 }
 
 // Google is all related api/sdk libraries
@@ -41,6 +43,7 @@ type Google struct {
 	dns                  dns.Interface
 	cloudIdentity        cloudidentity.Interface
 	admin                admin.Interface
+	oauth                oauth.Interface
 }
 
 // Initialize will set initial values for all libraries: credentials, logger
@@ -142,4 +145,14 @@ func (google *Google) GetAdmin(credentialsJSON string, domain string, adminUsern
 		err = google.admin.Initialize(credentialsJSON, domain, adminUsername, google.log)
 	}
 	return google.admin, err
+}
+
+// GetOAuth will get the oauth library
+func (google *Google) GetOAuth(scopes []string) (oauth.Interface, error) {
+	var err error
+	if google.oauth == nil {
+		google.oauth = &oauth.OAuth{}
+		err = google.oauth.Initialize(google.credentials, google.log, scopes)
+	}
+	return google.oauth, err
 }

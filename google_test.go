@@ -151,3 +151,31 @@ func TestGetAdmin(t *testing.T) {
 		t.Errorf("Got unexpected error from google.GetAdmin() second run: %s", err)
 	}
 }
+
+func TestGetOAuth(t *testing.T) {
+	var err error
+	g := &Google{}
+	g.Initialize("", loggermock.GetLogMock())
+	_, err = g.GetOAuth([]string{})
+	if err != nil {
+		t.Errorf("Got unexpected error from google.GetOAuth(): %s", err)
+	}
+	_, err = g.GetOAuth([]string{})
+	if err != nil {
+		t.Errorf("Got unexpected error from google.GetOAuth() second run: %s", err)
+	}
+}
+
+func TestGetOAuthWithKey(t *testing.T) {
+	var err error
+	g := &Google{}
+	g.Initialize(testCredentials, loggermock.GetLogMock())
+	_, err = g.GetOAuth([]string{})
+	if err != nil {
+		t.Errorf("Got unexpected error from google.GetOAuth() with key: %s", err)
+	}
+	_, err = g.GetOAuth([]string{})
+	if err != nil {
+		t.Errorf("Got unexpected error from google.GetOAuth() with key second run: %s", err)
+	}
+}

@@ -22,6 +22,8 @@ import (
 
 	mock "github.com/stretchr/testify/mock"
 
+	oauth "github.com/rockholla/go-google-lib/oauth"
+
 	storage "github.com/rockholla/go-google-lib/storage"
 )
 
@@ -207,6 +209,29 @@ func (_m *Interface) GetIAM() (iam.Interface, error) {
 	var r1 error
 	if rf, ok := ret.Get(1).(func() error); ok {
 		r1 = rf()
+	} else {
+		r1 = ret.Error(1)
+	}
+
+	return r0, r1
+}
+
+// GetOAuth provides a mock function with given fields: scopes
+func (_m *Interface) GetOAuth(scopes []string) (oauth.Interface, error) {
+	ret := _m.Called(scopes)
+
+	var r0 oauth.Interface
+	if rf, ok := ret.Get(0).(func([]string) oauth.Interface); ok {
+		r0 = rf(scopes)
+	} else {
+		if ret.Get(0) != nil {
+			r0 = ret.Get(0).(oauth.Interface)
+		}
+	}
+
+	var r1 error
+	if rf, ok := ret.Get(1).(func([]string) error); ok {
+		r1 = rf(scopes)
 	} else {
 		r1 = ret.Error(1)
 	}
